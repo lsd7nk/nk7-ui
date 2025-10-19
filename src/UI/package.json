@@ -1,0 +1,19 @@
+{
+  "unity": "2020.4", 
+  "name": "com.nk7.ui",
+  "version": "1.0.0",
+  "dependencies": {
+    "com.cysharp.unitask": "2.3.0",
+    "com.kyrylokuzyk.primetween": "1.3.5"
+  }, 
+  "author": {
+    "name": "Nk7", 
+    "url": "https://github.com/lsd7nk"
+  }, 
+  "keywords": [
+    "UI", 
+    "Prime tween"
+  ],
+  "displayName": "Nk7 UI", 
+  "description": "Lightweight UI based on PrimeTween"
+}
