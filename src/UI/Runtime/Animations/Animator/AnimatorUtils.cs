@@ -128,7 +128,7 @@ namespace Nk7.UI.Animations
 
         private static Vector3 GetToPositionByDirection(RectTransform target, MoveAnimation animation, Vector3 startValue)
         {
-            var rootCanvas = target.GetComponent<UnityEngine.Canvas>().rootCanvas;
+            var rootCanvas = target.GetComponent<Canvas>().rootCanvas;
             var rootCanvasRect = rootCanvas.GetComponent<RectTransform>().rect;
 
             float xOffset = rootCanvasRect.width / 2 + target.rect.width * target.pivot.x;
