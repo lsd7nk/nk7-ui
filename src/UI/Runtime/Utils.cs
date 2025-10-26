@@ -48,7 +48,7 @@ namespace Nk7.UI
 
         private static GameObject CreateCanvasAsParent(GameObject gameObject)
         {
-            var canvas = gameObject.AddComponent<UnityEngine.Canvas>();
+            var canvas = gameObject.AddComponent<Canvas>();
 
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 0;
