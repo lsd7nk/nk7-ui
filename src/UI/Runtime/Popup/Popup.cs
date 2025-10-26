@@ -11,7 +11,6 @@ namespace Nk7.UI
 {
     public sealed partial class Popup : AnimatedComponent
     {
-        [Space(10), Header(Utils.POPUP)]
         [SerializeField] private Container _overlay;
         [SerializeField] private bool _destroyAfterHide;
 
