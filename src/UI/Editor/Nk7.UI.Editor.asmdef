@@ -1,10 +1,8 @@
 {
-    "name": "Nk7.UI",
+    "name": "Nk7.UI.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:f51ebe6a0ceec4240a699833d6309b23",
-        "GUID:80ecb87cae9c44d19824e70ea7229748",
-        "GUID:21b0c8d1703a94250bfac916590cea4f"
+        "GUID:6bb0332b48d8e48e4bcd24bb28369372"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
