@@ -1,67 +1,75 @@
-# Nk7 UI
+# nk7-ui
 
-Лёгкий анимированный UI-фреймворк для Unity на базе PrimeTween.   
-Пакет включает готовые компоненты (экраны, попапы, кнопки, зацикленные элементы), асинхронные сценарии показа/скрытия с UniTask и расширенный инспектор, упрощающий настройку анимаций.
-
----
-
-## Содержание
-
-- [Особенности](#особенности)
-- [Требования](#требования)
-- [Установка](#установка)
-- [Быстрый старт](#быстрый-старт)
-- [Runtime API](#runtime-api)
+Лёгкий анимированный UI-фреймворк для Unity: PrimeTween управляет твинами, UniTask отвечает за асинхронные сценарии, инспекторы автоматизируют настройку анимаций.
 
 ## Особенности
 
-- **Анимируемые контейнеры** – `Container` хранит ссылки на `RectTransform` и `CanvasGroup`, кеширует стартовые позицию/поворот/масштаб/прозрачность и умеет мгновенно их восстанавливать.
-- **Асинхронный показ/скрытие** – `AnimatedComponent` и его наследники (`View`, `Popup`, `Button`) предоставляют синхронные и асинхронные методы `Show/Hide` с событиями начала/завершения.
-- **Анимации PrimeTween** – Move/Rotate/Scale/Fade твины с широкой настройкой (ease-типы, кастомные кривые, собственные From/To, punch и loop поведения).
-- **Готовые поведения** – `NotInteractableBehaviour` (show/hide), `InteractableBehaviour` (реакции на pointer), `LoopBehaviour` (циклическая анимация) переиспользуют общие контейнеры.
-- **Компонент Loop** – `LoopAnimatedComponent` проигрывает бесконечную анимацию для декоративных элементов.
-- **Улучшенный инспектор** – кастомные инспекторы показывают суммарное состояние анимаций, автоматически назначают контейнеры/оверлеи, property drawer скрывает неактуальные поля.
-- **Меню создания** – префабы Nk7 (`Container`, `View`, `Button`, `Popup`, `Loop`) доступны через *GameObject → UI → Nk7*.
+- Иерархия `AnimatedComponent` с общим жизненным циклом, событиями начала/конца и поддержкой отмены.
+- Анимации Move/Rotate/Scale/Fade на PrimeTween с ease-пресетами, собственными кривыми, punch/loop-режимами и кастомными From/To.
+- Поведения `NotInteractableBehaviour`, `InteractableBehaviour`, `LoopBehaviour` переиспользуют контейнеры и управляют состоянием взаимодействия.
+- `Container` кеширует стартовые значения `RectTransform` / `CanvasGroup` и умеет мгновенно их восстанавливать.
+- Префабы *GameObject → UI → Nk7* (`Container`, `View`, `Popup`, `Button`, `Loop`) ускоряют создание UI.
+- Кастомные инспекторы подсвечивают активные анимации, автоматически назначают контейнеры и скрывают неиспользуемые поля.
 
-## Требования
-
-- **Unity**: 2021.2 и новее
-- **Зависимости** (подтягиваются автоматически при установке пакета):
-  - [`com.cysharp.unitask` `2.3.0`](https://github.com/Cysharp/UniTask) – асинхронные операции для `ShowAsync`/`HideAsync`.
-  - [`com.kyrylokuzyk.primetween` `1.3.5`](https://assetstore.unity.com/packages/tools/animation/primetween-221986) – tween-движок.
-  - `com.unity.visualscripting` `1.9.7`
+## Содержание
+- [Установка](#установка)
+  - [Unity Package Manager](#unity-package-manager)
+  - [Ручная установка](#ручная-установка)
+- [Быстрый старт](#быстрый-старт)
+  - [1. Создайте контейнер](#1-создайте-контейнер)
+  - [2. Добавьте компоненты](#2-добавьте-компоненты)
+  - [3. Настройте поведения](#3-настройте-поведения)
+  - [4. Проверьте в работе](#4-проверьте-в-работе)
+- [Жизненный цикл](#жизненный-цикл)
+- [Инструменты инспектора](#инструменты-инспектора)
+- [Runtime API](#runtime-api)
+- [Требования](#требования)
 
 ## Установка
 
-- Откройте *Window → Package Manager*.
-- Нажмите кнопку *+* → *Add package from git URL…*.
-- Вставьте ссылку с путём к пакету:
+### Unity Package Manager
+1. Откройте Unity Package Manager (`Window → Package Manager`).
+2. Нажмите `+ → Add package from git URL…`.
+3. Вставьте `https://github.com/lsd7nk/nk7-ui.git?path=src/UI`.
 
-```
-https://github.com/lsd7nk/nk7-ui.git?path=src/UI
-```
+Unity не обновляет git-пакеты автоматически – при необходимости меняйте хеш вручную или используйте [UPM Git Extension](https://github.com/mob-sakai/UpmGitExtension).
+
+### Ручная установка
+Скопируйте папку `src/UI` в проект и добавьте `Nk7.UI.asmdef` к сборке.
 
 ## Быстрый старт
 
-1. **Создайте контейнер**
-   - *GameObject → UI → Nk7 → Container*. Если канваса нет – он создастся автоматически.
-   - Компонент `Container` инициализирует `RectTransform`, `CanvasGroup`, `Canvas` и сохраняет исходные значения.
+### 1. Создайте контейнер
+- *GameObject → UI → Nk7 → Container* создаёт компонент и добавляет канвас, если его ещё нет.
+- `Container` инициализирует `RectTransform`, `CanvasGroup`, `Canvas`, сохраняет исходные значения и предоставляет методы `Reset*`.
 
-2. **Добавьте компоненты UI**
-   - `View` – полноэкранный экран.
-   - `Popup` – попап с оверлеем и опцией удаления после скрытия.
-   - `Button` – кнопка с анимациями клика, нажатия, отпускания.
-   - `Loop` – декоративный элемент с бесконечной анимацией.
+### 2. Добавьте компоненты
+- `View` – полноэкранный экран с анимациями показа/скрытия.
+- `Popup` – попап с оверлеем и опцией удаления после скрытия.
+- `Button` – кнопка с состояниями клика, нажатия и отпускания.
+- `Loop` – декоративный элемент на базе `LoopAnimatedComponent`.
 
-3. **Настройте поведения**
-   - Раскройте блоки **Show Behaviour** / **Hide Behaviour**.
-   - Включите нужные Move/Rotate/Scale/Fade – отключённые блоки скрывают свои поля.
-   - Выберите `Ease Type`: при `Ease` отображается список Ease, при `Animation Curve` – поле кривой.
-   - `Use Custom From And To` включает ручные значения `From`/`To`.
+### 3. Настройте поведения
+- Раскройте блоки **Show Behaviour** / **Hide Behaviour**.
+- Включите нужные Move/Rotate/Scale/Fade – отключённые блоки скрывают свои поля.
+- Выберите `Ease Type`: `Ease` показывает список пресетов, `Animation Curve` — поле кривой.
+- `Use Custom From And To` активирует ручные границы `From` / `To`.
 
-4. **Проверьте в работе**
-   - Вызовите `Show()` / `Hide()` в Play Mode или `Loop()` на `LoopAnimatedComponent`.
-   - Подпишитесь на события (`OnShowStartEvent`, `OnHideFinishEvent` и т.д.) из инспектора или кода.
+### 4. Проверьте в работе
+- Вызовите `Show()` / `Hide()` в рантайме или `Loop()` на `LoopAnimatedComponent`.
+- Подпишитесь на события (`OnShowStartEvent`, `OnHideFinishEvent` и др.) в инспекторе или коде.
+
+## Жизненный цикл
+- `ShowAsync` и `HideAsync` запускают твины PrimeTween и ожидают завершения через UniTask.
+- События идут по порядку: `OnShowStartEvent` → анимации → `OnShowFinishEvent`; для скрытия последовательность зеркальна.
+- `AnimatedComponent.Cancel()` прерывает активные твины, возвращает контейнер в исходное состояние и завершает события с флагом отмены.
+- Наследники переопределяют `OnShowAnimationAsync`, `OnHideAnimationAsync` или синхронные версии, расширяя поведение.
+
+## Инструменты инспектора
+- Шапка инспектора показывает резюме активных анимаций и ключевые настройки.
+- Кнопки `Assign Container` и `Assign Overlay` автоматически подставляют ссылки.
+- Property drawers скрывают неактивные поля и оставляют только задействованные параметры.
+- Действия из контекстного меню возвращают кешированные трансформы и CanvasGroup к исходным значениям.
 
 ## Runtime API
 
@@ -70,8 +78,8 @@ public sealed class MyPopup : Popup
 {
     private async UniTaskVoid Start()
     {
-        Show();            // мгновенный вызов (асинхронно внутри)
-        await HideAsync(); // ожидаем завершения анимации
+        Show();            // мгновенный запуск (внутри асинхронно)
+        await HideAsync(); // ждём окончания анимации
     }
 }
 
@@ -84,7 +92,14 @@ public sealed class MyButton : Button
 }
 ```
 
-- `Show(bool withoutAnimation = false)` / `Hide(bool withoutAnimation = false)` – моментальные операции.
-- `ShowAsync(CancellationToken)` / `HideAsync(CancellationToken)` – awaitable-методы.
-- `LoopAnimatedComponent.Loop()` / `LoopAsync()` – запуск луп-анимации.
-- `Container` предоставляет методы `ResetPosition`, `ResetScale`, `ResetAlpha` и др.
+- `Show(bool withoutAnimation = false)` / `Hide(bool withoutAnimation = false)` — моментальные вызовы.
+- `ShowAsync(CancellationToken)` / `HideAsync(CancellationToken)` — awaitable-методы.
+- `LoopAnimatedComponent.Loop()` / `LoopAsync()` — запуск и ожидание луп-анимации, есть токен отмены.
+- Методы `Container` (`ResetPosition`, `ResetScale`, `ResetAlpha` и др.) восстанавливают кешированное базовое состояние.
+
+## Требования
+
+- Unity 2021.2+
+- `com.cysharp.unitask` 2.3.0
+- `com.kyrylokuzyk.primetween` 1.3.5
+- `com.unity.visualscripting` 1.9.7
