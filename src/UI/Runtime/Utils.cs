@@ -5,6 +5,8 @@ namespace Nk7.UI
 {
     public static class Utils
     {
+        public const string BUTTON_PATH_TMP_TEXT = BUTTON_PATH  + "/" + BUTTON_WITH_TMP_TEXT;
+        public const string BUTTON_PATH_IMAGE = BUTTON_PATH + "/" + BUTTON_WITH_ICON;
         public const string CONTAINER_PATH = COMPONENTS_PATH + CONTAINER;
         public const string BUTTON_PATH = COMPONENTS_PATH + BUTTON;
         public const string POPUP_PATH = COMPONENTS_PATH + POPUP;
@@ -12,7 +14,10 @@ namespace Nk7.UI
         public const string LOOP_PATH = COMPONENTS_PATH + LOOP;
 
         public const string ANIMATED_COMPONENT = "Animated component";
+        public const string BUTTON_WITH_TMP_TEXT = BUTTON + " " + TMP_TEXT;
+        public const string BUTTON_WITH_ICON = BUTTON + " " + ICON;
         public const string CONTAINER = "Container";
+        public const string TMP_TEXT = "TMP Text";
         public const string BUTTON = "Button";
         public const string POPUP = "Popup";
         public const string VIEW = "View";

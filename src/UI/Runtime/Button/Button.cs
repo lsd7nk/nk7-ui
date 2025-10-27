@@ -4,6 +4,7 @@ using Nk7.UI.Animations;
 using UnityEngine.UI;
 using UnityEngine;
 using System;
+using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -62,6 +63,19 @@ namespace Nk7.UI
             }
         }
 
+        private static void CreateTmpText(GameObject parentObject)
+        {
+            var textObject = new GameObject(Utils.TMP_TEXT, typeof(RectTransform), typeof(TextMeshProUGUI));
+            var textRectTransform = textObject.GetComponent<RectTransform>();
+            var text = textObject.GetComponent<TextMeshProUGUI>();
+
+            text.raycastTarget = false;
+
+            GameObjectUtility.SetParentAndAlign(textObject, parentObject);
+
+            textRectTransform.SetFullScreen(true);
+        }
+
         private static void CreateImage(GameObject parentObject)
         {
             var imageObject = new GameObject(Utils.ICON, typeof(RectTransform), typeof(Image));
@@ -72,8 +86,19 @@ namespace Nk7.UI
             imageRectTransform.SetFullScreen(true);
         }
 
-        [MenuItem(Utils.BUTTON_PATH, false, Utils.COMPONENT_PRIORITY)]
-        private static void CreateComponent(MenuCommand menuCommand)
+        [MenuItem(Utils.BUTTON_PATH_TMP_TEXT, false, Utils.COMPONENT_PRIORITY)]
+        private static void CreateComponentWithTmpText(MenuCommand menuCommand)
+        {
+            CreateButton(menuCommand, CreateTmpText, CreateImage);
+        }
+
+        [MenuItem(Utils.BUTTON_PATH_IMAGE, false, Utils.COMPONENT_PRIORITY)]
+        private static void CreateComponentWithImage(MenuCommand menuCommand)
+        {
+            CreateButton(menuCommand, CreateImage);
+        }
+
+        private static void CreateButton(MenuCommand menuCommand, params Action<GameObject>[] createChildCallbacks)
         {
             var buttonObject = new GameObject(Utils.BUTTON, typeof(RectTransform), typeof(Button));
             var parentObject = Utils.GetCanvasAsParent(menuCommand.context as GameObject);
@@ -89,7 +114,10 @@ namespace Nk7.UI
 
             buttonRectTransform.sizeDelta = new Vector2(320f, 100f);
 
-            CreateImage(buttonObject);
+            for (int i = 0; i < createChildCallbacks.Length; ++i)
+            {
+                createChildCallbacks[i].Invoke(buttonObject);
+            }
 
             container.Initialize();
             button.Initialize();
