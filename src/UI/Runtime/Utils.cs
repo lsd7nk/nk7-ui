@@ -33,11 +33,18 @@ namespace Nk7.UI
                 return CreateCanvasAsParent();
             }
 
-            if (selectedObject.TryGetComponent<Canvas>(out _))
+            var currentTransform = selectedObject.transform;
+
+            while (currentTransform != null)
             {
-                return selectedObject;
+                if (currentTransform.TryGetComponent<Canvas>(out var canvas))
+                {
+                    return selectedObject;
+                }
+
+                currentTransform = currentTransform.parent;
             }
-            
+
             return CreateCanvasAsParent(selectedObject);
         }
 
