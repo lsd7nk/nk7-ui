@@ -30,7 +30,7 @@ Lightweight animated UI framework for Unity built around PrimeTween tweens, UniT
 ### Unity Package Manager
 1. Open Unity Package Manager (`Window → Package Manager`).
 2. Click `+ → Add package from git URL…`.
-3. Enter `https://github.com/lsd7nk/nk7-ui.git?path=src/UI`.
+3. Enter `https://github.com/s-elovikov/nk7-ui.git?path=src/UI`.
 
 Unity does not auto-update Git-based packages; update the hash manually when needed or use [UPM Git Extension](https://github.com/mob-sakai/UpmGitExtension).
 
